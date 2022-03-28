@@ -41,7 +41,17 @@ namespace Library.Controllers
         // GET: BookController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            BookDTO bookDTO = bookService.GetBook(id);
+            if (bookDTO != null)
+            {
+                Book book = Mapper.Convert<BookDTO, Book>(bookDTO);
+                book.Autor = Mapper.Convert<AutorDTO, Autor>(bookDTO.Autor);
+                book.Genre = Mapper.Convert<GenreDTO, Genre>(bookDTO.Genre);
+                book.Type = Mapper.Convert<TypeDTO, Models.Type>(bookDTO.Type);
+                book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
+                return View(book);
+            }
+            return NotFound();
         }
 
         // GET: BookController/Create

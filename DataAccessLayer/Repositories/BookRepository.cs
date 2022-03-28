@@ -80,7 +80,7 @@ namespace DataAccessLayer.Repositories
                     {
                         Id = Convert.ToInt32(reader["BookId"]),
                         Name = reader["BookName"].ToString(),
-                        PublishingYear = Convert.ToInt32(reader["PublishingYerar"]),
+                        PublishingYear = Convert.ToInt32(reader["PublishingYear"]),
                         AutorId = Convert.ToInt32(reader["AutorId"]),
                         TypeId = Convert.ToInt32(reader["TypeId"]),
                         PublishingHouseId = Convert.ToInt32(reader["PublishingHouseId"]),
