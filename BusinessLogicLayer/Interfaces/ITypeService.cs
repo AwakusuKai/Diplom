@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BusinessLogicLayer.Interfaces
 {
-    interface ITypeService
+    public interface ITypeService
     {
         void CreateType(TypeDTO typeDTO);
         void UpdateType(TypeDTO typeDTO);

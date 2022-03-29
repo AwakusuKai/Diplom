@@ -9,24 +9,32 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Type = Library.Models.Type;
 
 namespace Library.Controllers
 {
     public class BookController : Controller
     {
         // GET: BookController
-        IBookService bookService;
-        IAutorService autorService;
+        IBookService BookService;
+        IAutorService AutorService;
+        ITypeService TypeService;
+        IGenreService GenreService;
+        IPHService PHService;
 
-        public BookController(IBookService bookService, IAutorService autorService)
+        public BookController(IBookService bookService, IAutorService autorService, ITypeService typeService, IGenreService genreService, IPHService phService)
         {
-            this.bookService = bookService;
-            this.autorService = autorService;
+            BookService = bookService;
+            AutorService = autorService;
+            TypeService = typeService;
+            GenreService = genreService;
+            PHService = phService;
+
         }
         
         public ActionResult Index()
         {
-            IEnumerable<BookDTO> bookDTOs = bookService.GetBooks();
+            IEnumerable<BookDTO> bookDTOs = BookService.GetBooks();
             List<Book> books = new List<Book>();
             foreach (BookDTO bookDTO in bookDTOs)
             {
@@ -44,13 +52,13 @@ namespace Library.Controllers
         // GET: BookController/Details/5
         public ActionResult Details(int id)
         {
-            BookDTO bookDTO = bookService.GetBook(id);
+            BookDTO bookDTO = BookService.GetBook(id);
             if (bookDTO != null)
             {
                 Book book = Mapper.Convert<BookDTO, Book>(bookDTO);
                 book.Autor = Mapper.Convert<AutorDTO, Autor>(bookDTO.Autor);
                 book.Genre = Mapper.Convert<GenreDTO, Genre>(bookDTO.Genre);
-                book.Type = Mapper.Convert<TypeDTO, Models.Type>(bookDTO.Type);
+                book.Type = Mapper.Convert<TypeDTO, Type>(bookDTO.Type);
                 book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
                 return View(book);
             }
@@ -60,25 +68,25 @@ namespace Library.Controllers
         // GET: BookController/Create
         public ActionResult Create()
         {
-            ViewData["AutorId"] = new SelectList(Mapper.ConvertEnumerable<AutorDTO, Autor>(autorService.GetAutors()), "Id", "Name");
-            /*ViewData["ProjectId"] = new SelectList(Mapper.ConvertEnumerable<ProjectDTO, Project>(projectService.GetProjects()), "Id", "Name");
-            ViewData["StatusId"] = new SelectList(Mapper.ConvertEnumerable<StatusDTO, Status>(statusService.GetStatuses()), "Id", "Name");*/
+            ViewData["AutorId"] = new SelectList(Mapper.ConvertEnumerable<AutorDTO, Autor>(AutorService.GetAutors()), "Id", "Name");
+            ViewData["TypeId"] = new SelectList(Mapper.ConvertEnumerable<TypeDTO, Type>(TypeService.GetTypes()), "Id", "Name");
+            ViewData["GenreId"] = new SelectList(Mapper.ConvertEnumerable<GenreDTO, Genre>(GenreService.GetGenres()), "Id", "Name");
+            ViewData["PHId"] = new SelectList(Mapper.ConvertEnumerable<PublishingHouseDTO, PublishingHouse>(PHService.GetPHs()), "Id", "Name");
             return View();
         }
 
         // POST: BookController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Book book)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                BookDTO bookDTO = Mapper.Convert<Book, BookDTO>(book);
+                BookService.CreateBook(bookDTO);
+                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(book);
         }
 
         // GET: BookController/Edit/5

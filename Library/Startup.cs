@@ -14,6 +14,7 @@ using BusinessLogicLayer.Services;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
+using Type = DataAccessLayer.Entities.Type;
 
 namespace Library
 {
@@ -34,6 +35,12 @@ namespace Library
             services.AddScoped<IRepository<Book>, BookRepository>();
             services.AddTransient<IAutorService, AutorService>();
             services.AddScoped<IRepository<Autor>, AutorRepository>();
+            services.AddTransient<ITypeService, TypeService>();
+            services.AddScoped<IRepository<Type>, TypeRepository>();
+            services.AddTransient<IGenreService, GenreService>();
+            services.AddScoped<IRepository<Genre>, GenreRepository>();
+            services.AddTransient<IPHService, PHService>();
+            services.AddScoped<IRepository<PublishingHouse>, PHRepository>();
             services.AddControllersWithViews();
         }
 
