@@ -32,6 +32,8 @@ namespace Library
             services.Configure<AppConfig>(Configuration.GetSection("ConnectionStrings"));
             services.AddTransient<IBookService, BookService>();
             services.AddScoped<IRepository<Book>, BookRepository>();
+            services.AddTransient<IAutorService, AutorService>();
+            services.AddScoped<IRepository<Autor>, AutorRepository>();
             services.AddControllersWithViews();
         }
 

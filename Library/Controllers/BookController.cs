@@ -4,6 +4,7 @@ using BusinessLogicLayer.Mappers;
 using Library.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,12 @@ namespace Library.Controllers
     {
         // GET: BookController
         IBookService bookService;
+        IAutorService autorService;
 
-        public BookController(IBookService bookService)
+        public BookController(IBookService bookService, IAutorService autorService)
         {
             this.bookService = bookService;
+            this.autorService = autorService;
         }
         
         public ActionResult Index()
@@ -57,6 +60,9 @@ namespace Library.Controllers
         // GET: BookController/Create
         public ActionResult Create()
         {
+            ViewData["AutorId"] = new SelectList(Mapper.ConvertEnumerable<AutorDTO, Autor>(autorService.GetAutors()), "Id", "Name");
+            /*ViewData["ProjectId"] = new SelectList(Mapper.ConvertEnumerable<ProjectDTO, Project>(projectService.GetProjects()), "Id", "Name");
+            ViewData["StatusId"] = new SelectList(Mapper.ConvertEnumerable<StatusDTO, Status>(statusService.GetStatuses()), "Id", "Name");*/
             return View();
         }
 
