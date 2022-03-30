@@ -99,11 +99,11 @@ namespace DataAccessLayer.Repositories
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlCommand sqlCommand = SQLCall.WriteCall(con, "spUpdateBook");
+                SqlCommand sqlCommand = SQLCall.WriteCall(con, "UpdateBook");
                 sqlCommand.Parameters.AddWithValue("@Id", book.Id);
                 sqlCommand.Parameters.AddWithValue("@Name", book.Name);
                 sqlCommand.Parameters.AddWithValue("@AutorId", book.AutorId);
-                sqlCommand.Parameters.AddWithValue("@Genre", book.Genre);
+                sqlCommand.Parameters.AddWithValue("@GenreId", book.GenreId);
                 sqlCommand.Parameters.AddWithValue("@TypeId", book.TypeId);
                 sqlCommand.Parameters.AddWithValue("@PublishingYear", book.PublishingYear);
                 sqlCommand.Parameters.AddWithValue("@PublishingHouseId", book.PublishingHouseId);

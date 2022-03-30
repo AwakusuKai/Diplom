@@ -90,45 +90,65 @@ namespace Library.Controllers
         }
 
         // GET: BookController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            ViewData["AutorId"] = new SelectList(Mapper.ConvertEnumerable<AutorDTO, Autor>(AutorService.GetAutors()), "Id", "Name");
+            ViewData["TypeId"] = new SelectList(Mapper.ConvertEnumerable<TypeDTO, Type>(TypeService.GetTypes()), "Id", "Name");
+            ViewData["GenreId"] = new SelectList(Mapper.ConvertEnumerable<GenreDTO, Genre>(GenreService.GetGenres()), "Id", "Name");
+            ViewData["PHId"] = new SelectList(Mapper.ConvertEnumerable<PublishingHouseDTO, PublishingHouse>(PHService.GetPHs()), "Id", "Name");
+            if (id != null)
+            {
+                BookDTO bookDTO = BookService.GetBook(id);
+                if (bookDTO != null)
+                {
+                    Book book = Mapper.Convert<BookDTO, Book>(bookDTO);
+                    book.Autor = Mapper.Convert<AutorDTO, Autor>(bookDTO.Autor);
+                    book.Genre = Mapper.Convert<GenreDTO, Genre>(bookDTO.Genre);
+                    book.Type = Mapper.Convert<TypeDTO, Type>(bookDTO.Type);
+                    book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
+                    return View(book);
+                }
+            }
+            return NotFound();
         }
 
         // POST: BookController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Book book)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                BookService.UpdateBook(Mapper.Convert<Book, BookDTO>(book));
+                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(book);
         }
 
         // GET: BookController/Delete/5
-        public ActionResult Delete(int id)
+        [ActionName("Delete")]
+        public ActionResult ConfirmDelete(int id)
         {
-            return View();
+            BookDTO bookDTO = BookService.GetBook(id);
+            if (bookDTO == null)
+            {
+                return NotFound();
+            }
+            Book book = Mapper.Convert<BookDTO, Book>(bookDTO);
+            book.Autor = Mapper.Convert<AutorDTO, Autor>(bookDTO.Autor);
+            book.Genre = Mapper.Convert<GenreDTO, Genre>(bookDTO.Genre);
+            book.Type = Mapper.Convert<TypeDTO, Type>(bookDTO.Type);
+            book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
+            return View(book);
         }
 
         // POST: BookController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            BookService.DeleteBook(id);
+            return RedirectToAction("Index");
         }
     }
 }
