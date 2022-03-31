@@ -10,7 +10,7 @@ namespace BusinessLogicLayer.Interfaces
         void CreateBook(BookDTO bookDTO);
         void UpdateBook(BookDTO bookDTO);
         void DeleteBook(int id);
-        IEnumerable<BookDTO> GetBooks();
+        IEnumerable<BookDTO> GetBooks(int? autor, int? genre, int? ph, string name);
         BookDTO GetBook(int? id);
     }
 }

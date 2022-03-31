@@ -22,17 +22,24 @@ namespace BusinessLogicLayer.Services
             Book book = Mapper.Convert<BookDTO, Book>(bookDTO);
             BookRepository.Create(book);
         }
-        public IEnumerable<BookDTO> GetBooks()
+        public IEnumerable<BookDTO> GetBooks(int? autor, int? genre, int? ph, string name)
         {
             List<BookDTO> bookDTOs = new List<BookDTO>();
             foreach (Book book in BookRepository.GetAll())
             {
-                BookDTO bookDTO = Mapper.Convert<Book, BookDTO>(book);
-                bookDTO.Autor = Mapper.Convert<Autor, AutorDTO>(book.Autor);
-                bookDTO.Genre = Mapper.Convert<Genre, GenreDTO>(book.Genre);
-                bookDTO.PublishingHouse = Mapper.Convert<PublishingHouse, PublishingHouseDTO>(book.PublishingHouse);
-                bookDTO.Type = Mapper.Convert<DataAccessLayer.Entities.Type, TypeDTO>(book.Type);
-                bookDTOs.Add(bookDTO);
+                if ((autor == null || autor == 0 || autor == book.AutorId) &&
+                   (genre == null || genre == 0 || genre == book.GenreId) &&
+                   (ph == null || ph == 0 || ph == book.PublishingHouseId) &&
+                   (String.IsNullOrEmpty(name) || book.Name.Contains(name)))
+                {
+                    BookDTO bookDTO = Mapper.Convert<Book, BookDTO>(book);
+                    bookDTO.Autor = Mapper.Convert<Autor, AutorDTO>(book.Autor);
+                    bookDTO.Genre = Mapper.Convert<Genre, GenreDTO>(book.Genre);
+                    bookDTO.PublishingHouse = Mapper.Convert<PublishingHouse, PublishingHouseDTO>(book.PublishingHouse);
+                    bookDTO.Type = Mapper.Convert<DataAccessLayer.Entities.Type, TypeDTO>(book.Type);
+                    bookDTOs.Add(bookDTO);
+                }
+                
             }
 
             return bookDTOs;

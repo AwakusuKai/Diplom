@@ -2,38 +2,57 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model IEnumerable<Library.Models.Book>
+@model Library.Models.BookListViewModel
+@using Library.Models 
 
 <p>
     <a asp-action="Create">Добавить книгу</a>
 </p>
 
+<form method="get">
+    <div class="form-inline form-group">
+        <label class="control-label">Название: </label>
+        <input name="name" class="form-control" />
+
+        <label class="control-label">Автор: </label>
+        <select name="autor" asp-items="Model.Autors" class="form-control"></select>
+
+        <label class="control-label">Жанр: </label>
+        <select name="genre" asp-items="Model.Genres" class="form-control"></select>
+
+        <label class="control-label">Издательство: </label>
+        <select name="ph" asp-items="Model.PublishingHouses" class="form-control"></select>
+
+        <input type="submit" value="Фильтр" class="btn btn-default" />
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Item.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Autor)
+                @Html.DisplayNameFor(model => model.Item.Autor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Genre)
+                @Html.DisplayNameFor(model => model.Item.Genre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                @Html.DisplayNameFor(model => model.Item.Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PublishingYear)
+                @Html.DisplayNameFor(model => model.Item.PublishingYear)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PublishingHouse)
+                @Html.DisplayNameFor(model => model.Item.PublishingHouse)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Books)
         {
             <tr>
                 <td>

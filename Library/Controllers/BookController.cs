@@ -32,9 +32,11 @@ namespace Library.Controllers
 
         }
         
-        public ActionResult Index()
+        public ActionResult Index(int? autor, int? genre, int? ph, string name)
         {
-            IEnumerable<BookDTO> bookDTOs = BookService.GetBooks();
+            IEnumerable<BookDTO> bookDTOs = BookService.GetBooks(autor,genre, ph,  name); //используя параметры, отсортировать выдачу.
+
+
             List<Book> books = new List<Book>();
             foreach (BookDTO bookDTO in bookDTOs)
             {
@@ -45,8 +47,27 @@ namespace Library.Controllers
                 book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
                 books.Add(book);
             }
+            List<Autor> autors = new List<Autor>(Mapper.ConvertEnumerable<AutorDTO, Autor>(AutorService.GetAutors()));
+            autors.Insert(0, new Autor { Name = "Все", Id = 0 });
+            List<Genre> genres = new List<Genre>(Mapper.ConvertEnumerable<GenreDTO, Genre>(GenreService.GetGenres()));
+            genres.Insert(0, new Genre { Name = "Все", Id = 0 });
+            List<Type> types = new List<Type>(Mapper.ConvertEnumerable<TypeDTO, Type>(TypeService.GetTypes()));
+            types.Insert(0, new Type { Name = "Все", Id = 0 });
+            List<PublishingHouse> publishingHouses = new List<PublishingHouse>(Mapper.ConvertEnumerable<PublishingHouseDTO, PublishingHouse>(PHService.GetPHs()));
+            publishingHouses.Insert(0, new PublishingHouse { Name = "Все", Id = 0 });
 
-            return View(books);
+
+
+            BookListViewModel bookListViewModel = new BookListViewModel
+            {
+                Books = books,
+                Autors = new SelectList(autors, "Id", "Name"),
+                Genres = new SelectList(genres, "Id", "Name"),
+                PublishingHouses = new SelectList(publishingHouses, "Id", "Name"),
+                Name = name
+            };
+
+            return View(bookListViewModel);
         }
 
         // GET: BookController/Details/5
