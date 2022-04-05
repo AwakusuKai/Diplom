@@ -12,9 +12,11 @@ namespace BusinessLogicLayer.Services
     public class BookService : IBookService
     {
         IRepository<Book> BookRepository { get; set; }
-        public BookService(IRepository<Book> bookRepository)
+        IRepository<Copy> CopyRepository { get; set; }
+        public BookService(IRepository<Book> bookRepository, IRepository<Copy> copyRepository)
         {
             BookRepository = bookRepository;
+            CopyRepository = copyRepository;
         }
 
         public void CreateBook(BookDTO bookDTO)
@@ -39,7 +41,7 @@ namespace BusinessLogicLayer.Services
                     bookDTO.Type = Mapper.Convert<DataAccessLayer.Entities.Type, TypeDTO>(book.Type);
                     bookDTOs.Add(bookDTO);
                 }
-                
+
             }
 
             return bookDTOs;
@@ -68,6 +70,51 @@ namespace BusinessLogicLayer.Services
         public void DeleteBook(int id)
         {
             BookRepository.Delete(id);
+        }
+
+        public void CreateCopy(CopyDTO copyDTO)
+        {
+            Copy copy = Mapper.Convert<CopyDTO, Copy>(copyDTO);
+            CopyRepository.Create(copy);
+        }
+
+        public IEnumerable<CopyDTO> GetCopies(int? book)
+        {
+            List<CopyDTO> copyDTOs = new List<CopyDTO>();
+            foreach (Copy copy in CopyRepository.GetAll())
+            {
+                if (book == null || book == 0 || book == copy.BookId)
+                {
+                    CopyDTO copyDTO = Mapper.Convert<Copy, CopyDTO>(copy);
+                    copyDTO.Book = GetBook(copy.BookId);
+                    copyDTOs.Add(copyDTO);
+                }
+
+            }
+            return copyDTOs;
+        }
+
+        public void UpdateCopy(CopyDTO copyDTO)
+        {
+            Copy copy = Mapper.Convert<CopyDTO, Copy>(copyDTO);
+            CopyRepository.Update(copy);
+        }
+
+        public CopyDTO GetCopy(int? id)
+        {
+            var copy = CopyRepository.GetById(id.Value);
+            if (copy != null)
+            {
+                CopyDTO copyDTO = Mapper.Convert<Copy, CopyDTO>(copy);
+                copyDTO.Book = GetBook(copy.BookId);
+                return copyDTO;
+            }
+            return null;
+        }
+
+        public void DeleteCopy(int id)
+        {
+            CopyRepository.Delete(id);
         }
     }
 }

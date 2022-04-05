@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model Library.Models.CopyListViewModel
+@using Library.Models 
+
+<p>
+    <a asp-action="Create">Добавить экземпляр</a>
+</p>
+
+<form method="get">
+    <div class="form-inline form-group">
+        <label class="control-label">Книга: </label>
+        <select name="book" asp-items="Model.Books" class="form-control"></select>
+
+        <input type="submit" value="Фильтр" class="btn btn-default" />
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.Book.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.Bookcase)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.Shelf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.StatusString)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Copies)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bookcase)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Shelf)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusString)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+                }
+            </tbody>
+        </table>

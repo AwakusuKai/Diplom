@@ -41,6 +41,7 @@ namespace Library
             services.AddScoped<IRepository<Genre>, GenreRepository>();
             services.AddTransient<IPHService, PHService>();
             services.AddScoped<IRepository<PublishingHouse>, PHRepository>();
+            services.AddScoped<IRepository<Copy>, CopyRepository>();
             services.AddControllersWithViews();
         }
 
