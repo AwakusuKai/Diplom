@@ -116,5 +116,19 @@ namespace BusinessLogicLayer.Services
         {
             CopyRepository.Delete(id);
         }
+
+        public bool IsFreeCopiesExist(int bookId)
+        {
+            IEnumerable<CopyDTO> copyDTOs = GetCopies(bookId);
+            foreach(CopyDTO copyDTO in copyDTOs)
+            {
+                if(copyDTO.Status == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
     }
 }

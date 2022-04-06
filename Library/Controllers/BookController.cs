@@ -45,6 +45,7 @@ namespace Library.Controllers
                 book.Autor = Mapper.Convert<AutorDTO, Autor>(bookDTO.Autor);
                 book.Genre = Mapper.Convert<GenreDTO, Genre>(bookDTO.Genre);
                 book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
+                book.BookStatus = BookService.IsFreeCopiesExist(bookDTO.Id);
                 books.Add(book);
             }
             List<Autor> autors = new List<Autor>(Mapper.ConvertEnumerable<AutorDTO, Autor>(AutorService.GetAutors()));
@@ -81,6 +82,7 @@ namespace Library.Controllers
                 book.Genre = Mapper.Convert<GenreDTO, Genre>(bookDTO.Genre);
                 book.Type = Mapper.Convert<TypeDTO, Type>(bookDTO.Type);
                 book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
+                book.BookStatus = BookService.IsFreeCopiesExist(bookDTO.Id);
                 return View(book);
             }
             return NotFound();

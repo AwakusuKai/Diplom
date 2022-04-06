@@ -18,5 +18,7 @@ namespace BusinessLogicLayer.Interfaces
         void DeleteCopy(int id);
         IEnumerable<CopyDTO> GetCopies(int? book);
         CopyDTO GetCopy(int? id);
+
+        bool IsFreeCopiesExist(int bookId);
     }
 }

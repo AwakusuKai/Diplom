@@ -48,6 +48,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Item.PublishingHouse)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.StatusString)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -72,6 +75,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PublishingHouse.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusString)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |

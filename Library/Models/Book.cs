@@ -30,5 +30,22 @@ namespace Library.Models
         [NavigationProperty]
         [Display(Name = "Издательство")]
         public PublishingHouse PublishingHouse { get; set; }
+        [NavigationProperty]
+        public bool BookStatus { get; set; }
+        [NavigationProperty]
+        [Display(Name = "Наличие")]
+        public String StatusString {
+            get
+            {
+                if (BookStatus == true)
+                {
+                    return "В наличии";
+                }
+                else 
+                {
+                    return "Нет в наличии";
+                }
+            }
+        }
     }
 }
