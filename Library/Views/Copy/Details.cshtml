@@ -1,50 +1,44 @@
-﻿@model Library.Models.Book
+﻿@model Library.Models.Copy
 
 @{
-    ViewData["Title"] = @Html.DisplayFor(model => model.Name);
+    ViewData["Title"] = @Html.DisplayFor(model => model.Book.Name);
 }
 
 <h1>Информация</h1>
 
 <div>
-    <h4>@Html.DisplayFor(model => model.Name)</h4>
+    <h4>Экземпляо книги @Html.DisplayFor(model => model.Book.Name)</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Id)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Autor)
+            @Html.DisplayNameFor(model => model.Book.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Autor.Name)
+            @Html.DisplayFor(model => model.Book.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
+            @Html.DisplayNameFor(model => model.Bookcase)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Genre.Name)
+            @Html.DisplayFor(model => model.Bookcase)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
+            @Html.DisplayNameFor(model => model.Shelf)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Type.Name)
+            @Html.DisplayFor(model => model.Shelf)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PublishingYear)
+            @Html.DisplayNameFor(model => model.StatusString)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PublishingYear)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PublishingHouse)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PublishingHouse.Name)
+            @Html.DisplayFor(model => model.StatusString)
         </dd>
     </dl>
 </div>

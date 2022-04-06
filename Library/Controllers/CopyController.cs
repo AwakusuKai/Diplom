@@ -34,7 +34,7 @@ namespace Library.Controllers
         
         public ActionResult Index(int? book)
         {
-            IEnumerable<CopyDTO> copyDTOs = BookService.GetCopies(book); //используя параметры, отсортировать выдачу.
+            IEnumerable<CopyDTO> copyDTOs = BookService.GetCopies(book); 
 
 
             List<Copy> copies = new List<Copy>();
@@ -60,105 +60,104 @@ namespace Library.Controllers
             return View(copyListViewModel);
         }
 
-        // GET: BookController/Details/5
+        // GET: CopyController/Details/5
         public ActionResult Details(int id)
         {
-            BookDTO bookDTO = BookService.GetBook(id);
-            if (bookDTO != null)
+            CopyDTO copyDTO = BookService.GetCopy(id);
+            if (copyDTO != null)
             {
-                Book book = Mapper.Convert<BookDTO, Book>(bookDTO);
-                book.Autor = Mapper.Convert<AutorDTO, Autor>(bookDTO.Autor);
-                book.Genre = Mapper.Convert<GenreDTO, Genre>(bookDTO.Genre);
-                book.Type = Mapper.Convert<TypeDTO, Type>(bookDTO.Type);
-                book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
-                return View(book);
+                Copy copy = Mapper.Convert<CopyDTO, Copy>(copyDTO);
+                copy.Book = Mapper.Convert<BookDTO, Book>(copyDTO.Book);
+                copy.Book.Type = Mapper.Convert<TypeDTO, Models.Type>(copyDTO.Book.Type);
+                copy.Book.Autor = Mapper.Convert<AutorDTO, Autor>(copyDTO.Book.Autor);
+                copy.Book.Genre = Mapper.Convert<GenreDTO, Genre>(copyDTO.Book.Genre);
+                copy.Book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(copyDTO.Book.PublishingHouse);
+                return View(copy);
             }
             return NotFound();
         }
 
-        // GET: BookController/Create
+        // GET: CopyController/Create
         public ActionResult Create()
         {
-            ViewData["AutorId"] = new SelectList(Mapper.ConvertEnumerable<AutorDTO, Autor>(AutorService.GetAutors()), "Id", "Name");
-            ViewData["TypeId"] = new SelectList(Mapper.ConvertEnumerable<TypeDTO, Type>(TypeService.GetTypes()), "Id", "Name");
-            ViewData["GenreId"] = new SelectList(Mapper.ConvertEnumerable<GenreDTO, Genre>(GenreService.GetGenres()), "Id", "Name");
-            ViewData["PHId"] = new SelectList(Mapper.ConvertEnumerable<PublishingHouseDTO, PublishingHouse>(PHService.GetPHs()), "Id", "Name");
+            ViewData["BookId"] = new SelectList(Mapper.ConvertEnumerable<BookDTO, Book>(BookService.GetBooks(null,null,null,null)), "Id", "Name");
             return View();
         }
 
-        // POST: BookController/Create
+        // POST: CopyController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Book book)
+        public ActionResult Create(Copy copy)
         {
             if (ModelState.IsValid)
             {
-                BookDTO bookDTO = Mapper.Convert<Book, BookDTO>(book);
-                BookService.CreateBook(bookDTO);
+                CopyDTO copyDTO = Mapper.Convert<Copy, CopyDTO>(copy);
+                copyDTO.Status = 0;
+                BookService.CreateCopy(copyDTO);
                 return RedirectToAction("Index");
             }
-            return View(book);
+            return View(copy);
         }
 
-        // GET: BookController/Edit/5
+        // GET: CopyController/Edit/5
         public ActionResult Edit(int? id)
         {
-            ViewData["AutorId"] = new SelectList(Mapper.ConvertEnumerable<AutorDTO, Autor>(AutorService.GetAutors()), "Id", "Name");
-            ViewData["TypeId"] = new SelectList(Mapper.ConvertEnumerable<TypeDTO, Type>(TypeService.GetTypes()), "Id", "Name");
-            ViewData["GenreId"] = new SelectList(Mapper.ConvertEnumerable<GenreDTO, Genre>(GenreService.GetGenres()), "Id", "Name");
-            ViewData["PHId"] = new SelectList(Mapper.ConvertEnumerable<PublishingHouseDTO, PublishingHouse>(PHService.GetPHs()), "Id", "Name");
+            ViewData["BookId"] = new SelectList(Mapper.ConvertEnumerable<BookDTO, Book>(BookService.GetBooks(null, null, null, null)), "Id", "Name");
+            
             if (id != null)
             {
-                BookDTO bookDTO = BookService.GetBook(id);
-                if (bookDTO != null)
+                CopyDTO copyDTO = BookService.GetCopy(id);
+                if (copyDTO != null)
                 {
-                    Book book = Mapper.Convert<BookDTO, Book>(bookDTO);
-                    book.Autor = Mapper.Convert<AutorDTO, Autor>(bookDTO.Autor);
-                    book.Genre = Mapper.Convert<GenreDTO, Genre>(bookDTO.Genre);
-                    book.Type = Mapper.Convert<TypeDTO, Type>(bookDTO.Type);
-                    book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
-                    return View(book);
+                    Copy copy = Mapper.Convert<CopyDTO, Copy>(copyDTO);
+                    copy.Book = Mapper.Convert<BookDTO, Book>(copyDTO.Book);
+                    copy.Book.Type = Mapper.Convert<TypeDTO, Models.Type>(copyDTO.Book.Type);
+                    copy.Book.Autor = Mapper.Convert<AutorDTO, Autor>(copyDTO.Book.Autor);
+                    copy.Book.Genre = Mapper.Convert<GenreDTO, Genre>(copyDTO.Book.Genre);
+                    copy.Book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(copyDTO.Book.PublishingHouse);
+                    return View(copy);
                 }
             }
             return NotFound();
         }
 
-        // POST: BookController/Edit/5
+        // POST: CopyController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Book book)
+        public ActionResult Edit(int id, Copy copy)
         {
             if (ModelState.IsValid)
             {
-                BookService.UpdateBook(Mapper.Convert<Book, BookDTO>(book));
+                BookService.UpdateCopy(Mapper.Convert<Copy, CopyDTO>(copy));
                 return RedirectToAction("Index");
             }
-            return View(book);
+            return View(copy);
         }
 
-        // GET: BookController/Delete/5
+        // GET: CopyController/Delete/5
         [ActionName("Delete")]
         public ActionResult ConfirmDelete(int id)
         {
-            BookDTO bookDTO = BookService.GetBook(id);
-            if (bookDTO == null)
+            CopyDTO copyDTO = BookService.GetCopy(id);
+            if (copyDTO == null)
             {
                 return NotFound();
             }
-            Book book = Mapper.Convert<BookDTO, Book>(bookDTO);
-            book.Autor = Mapper.Convert<AutorDTO, Autor>(bookDTO.Autor);
-            book.Genre = Mapper.Convert<GenreDTO, Genre>(bookDTO.Genre);
-            book.Type = Mapper.Convert<TypeDTO, Type>(bookDTO.Type);
-            book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(bookDTO.PublishingHouse);
-            return View(book);
+            Copy copy = Mapper.Convert<CopyDTO, Copy>(copyDTO);
+            copy.Book = Mapper.Convert<BookDTO, Book>(copyDTO.Book);
+            copy.Book.Type = Mapper.Convert<TypeDTO, Models.Type>(copyDTO.Book.Type);
+            copy.Book.Autor = Mapper.Convert<AutorDTO, Autor>(copyDTO.Book.Autor);
+            copy.Book.Genre = Mapper.Convert<GenreDTO, Genre>(copyDTO.Book.Genre);
+            copy.Book.PublishingHouse = Mapper.Convert<PublishingHouseDTO, PublishingHouse>(copyDTO.Book.PublishingHouse);
+            return View(copy);
         }
 
-        // POST: BookController/Delete/5
+        // POST: CopyController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            BookService.DeleteBook(id);
+            BookService.DeleteCopy(id);
             return RedirectToAction("Index");
         }
     }
