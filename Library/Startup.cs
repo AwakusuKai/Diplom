@@ -15,6 +15,7 @@ using DataAccessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
 using Type = DataAccessLayer.Entities.Type;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Library
 {
@@ -43,6 +44,15 @@ namespace Library
             services.AddScoped<IRepository<PublishingHouse>, PHRepository>();
             services.AddScoped<IRepository<Copy>, CopyRepository>();
             services.AddControllersWithViews();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                });
+            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IRepository<User>, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +73,9 @@ namespace Library
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {

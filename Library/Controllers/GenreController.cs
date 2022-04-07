@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Type = Library.Models.Type;
 
@@ -25,6 +26,9 @@ namespace Library.Controllers
         
         public ActionResult Index()
         {
+            string role = ClaimsIdentity.DefaultRoleClaimType;
+            return Content($"ваша роль: {role}");
+            /*
             IEnumerable<GenreDTO> genreDTOs = GenreService.GetGenres();
             List<Genre> genres = new List<Genre>();
             foreach (GenreDTO genreDTO in genreDTOs)
@@ -33,7 +37,7 @@ namespace Library.Controllers
                 genres.Add(genre);
             }
 
-            return View(genres);
+            return View(genres);*/
         }
 
         // GET: GenreController/Create

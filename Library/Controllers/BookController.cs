@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Interfaces;
 using BusinessLogicLayer.Mappers;
 using Library.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -89,6 +90,7 @@ namespace Library.Controllers
         }
 
         // GET: BookController/Create
+        [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
             ViewData["AutorId"] = new SelectList(Mapper.ConvertEnumerable<AutorDTO, Autor>(AutorService.GetAutors()), "Id", "Name");
