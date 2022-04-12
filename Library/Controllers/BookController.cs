@@ -115,6 +115,7 @@ namespace Library.Controllers
         }
 
         // GET: BookController/Edit/5
+        [Authorize(Roles = "admin")]
         public ActionResult Edit(int? id)
         {
             ViewData["AutorId"] = new SelectList(Mapper.ConvertEnumerable<AutorDTO, Autor>(AutorService.GetAutors()), "Id", "Name");
@@ -152,6 +153,7 @@ namespace Library.Controllers
 
         // GET: BookController/Delete/5
         [ActionName("Delete")]
+        [Authorize(Roles = "admin")]
         public ActionResult ConfirmDelete(int id)
         {
             BookDTO bookDTO = BookService.GetBook(id);

@@ -4,6 +4,7 @@ using BusinessLogicLayer.Mappers;
 using Library.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace Library.Controllers
             UserService = userService;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public IActionResult Register()
         {
@@ -45,7 +47,7 @@ namespace Library.Controllers
 
                     await Authenticate(user); // аутентификация
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Book");
                 }
                 else
                     ModelState.AddModelError("", "Такой пользователь уже существует");
@@ -53,7 +55,7 @@ namespace Library.Controllers
             return View(model);
         }
 
-        [HttpGet]
+       [HttpGet]
         public IActionResult Login()
         {
             return View();
@@ -85,7 +87,7 @@ namespace Library.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name.Replace(" ", ""))
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,

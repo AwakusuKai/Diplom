@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Interfaces;
 using BusinessLogicLayer.Mappers;
 using Library.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ using Type = Library.Models.Type;
 
 namespace Library.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class TypeController : Controller
     {
         // GET: TypeController
