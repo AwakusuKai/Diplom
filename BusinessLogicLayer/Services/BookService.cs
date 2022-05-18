@@ -3,6 +3,7 @@ using BusinessLogicLayer.Interfaces;
 using BusinessLogicLayer.Mappers;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
+using DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,10 +14,12 @@ namespace BusinessLogicLayer.Services
     {
         IRepository<Book> BookRepository { get; set; }
         IRepository<Copy> CopyRepository { get; set; }
-        public BookService(IRepository<Book> bookRepository, IRepository<Copy> copyRepository)
+        IRepository<Order> OrderRepository { get; set; }
+        public BookService(IRepository<Book> bookRepository, IRepository<Copy> copyRepository, IRepository<Order> orderRepository)
         {
             BookRepository = bookRepository;
             CopyRepository = copyRepository;
+            OrderRepository = orderRepository;
         }
 
         public void CreateBook(BookDTO bookDTO)
@@ -129,6 +132,71 @@ namespace BusinessLogicLayer.Services
             }
             return false;
 
+        }
+
+        public void CreateOrder(OrderDTO orderDTO)
+        {
+            Order order = Mapper.Convert<OrderDTO, Order>(orderDTO);
+            OrderRepository.Create(order);
+            Copy copy = CopyRepository.GetById(orderDTO.CopyId);
+            copy.Status = 1;
+            CopyRepository.Update(copy);
+        }
+
+        public IEnumerable<OrderDTO> GetOrders(int? user)
+        {
+            List<OrderDTO> orderDTOs = new List<OrderDTO>();
+            foreach (Order order in OrderRepository.GetAll())
+            {
+                if (user == null || user == 0 || user == order.UserId)
+                {
+                    OrderDTO orderDTO = Mapper.Convert<Order, OrderDTO>(order);
+                    orderDTO.Copy = GetCopy(order.CopyId);
+                    orderDTO.User = Mapper.Convert<User, UserDTO>(order.User);
+                    orderDTO.User.Role = Mapper.Convert<Role, RoleDTO>(order.User.Role);
+                    orderDTOs.Add(orderDTO);
+                }
+
+            }
+            return orderDTOs;
+        }
+
+        public void UpdateOrder(OrderDTO orderDTO)
+        {
+            Order order = Mapper.Convert<OrderDTO, Order>(orderDTO);
+            OrderRepository.Update(order);
+        }
+
+        public OrderDTO GetOrder(int? id)
+        {
+            var order = OrderRepository.GetById(id.Value);
+            if (order != null)
+            {
+                OrderDTO orderDTO = Mapper.Convert<Order, OrderDTO>(order);
+                orderDTO.Copy = GetCopy(order.CopyId);
+                orderDTO.User = Mapper.Convert<User, UserDTO>(order.User);
+                orderDTO.User.Role = Mapper.Convert<Role, RoleDTO>(order.User.Role);
+                return orderDTO;
+            }
+            return null;
+        }
+
+        public void DeleteOrder(int id)
+        {
+            OrderRepository.Delete(id);
+        }
+
+        public int GetFreeCopyId(int bookId)
+        {
+            IEnumerable<CopyDTO> copies = GetCopies(bookId);
+            foreach(CopyDTO copyDTO in copies)
+            {
+                if(copyDTO.Status == 0)
+                {
+                    return copyDTO.Id;
+                }
+            }
+            return 0;
         }
     }
 }

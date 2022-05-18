@@ -2,8 +2,10 @@
     ViewData["Title"] = "Home Page";
 }
 
+@using System.Security.Claims
 @model Library.Models.BookListViewModel
-@using Library.Models 
+@using Library.Models
+
 
 <p>
     <a asp-action="Create">Добавить книгу</a>
@@ -69,7 +71,7 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Type.Name)
-                </td>   
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PublishingYear)
                 </td>
@@ -82,9 +84,10 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a> |
+                    <a asp-controller="Order" asp-action="OrderUser" asp-route-id="@item.Id">Заказать</a>
                 </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            </tr>
+        }
+    </tbody>
+</table>

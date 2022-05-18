@@ -43,6 +43,7 @@ namespace Library
             services.AddTransient<IPHService, PHService>();
             services.AddScoped<IRepository<PublishingHouse>, PHRepository>();
             services.AddScoped<IRepository<Copy>, CopyRepository>();
+            services.AddScoped<IRepository<Order>, OrderRepository>();
             services.AddControllersWithViews();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

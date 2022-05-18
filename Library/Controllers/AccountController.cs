@@ -87,13 +87,30 @@ namespace Library.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name),
+                new Claim("Name", user.Name),
+                new Claim("Surname", user.Surname)
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
             // установка аутентификационных куки
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
+        [Authorize(Roles = "admin, user")]
+        [HttpGet]
+        public IActionResult LogOut()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogOut(User user)
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Book");
         }
     }
 }

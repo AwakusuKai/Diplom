@@ -1,0 +1,54 @@
+﻿@model Library.Models.Book
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Заказ";
+}
+
+<h1>Заказ</h1>
+
+<h3>Вы уверены, что хотите забронировать эту книгу?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Autor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Autor.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Genre.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Type.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PublishingYear)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PublishingYear)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PublishingHouse)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PublishingHouse.Name)
+        </dd>
+    </dl>
+    <p>
+        <a asp-action="OrderConfirmUser" asp-route-bookId="@ViewBag.BookId" asp-route-userId="@User.FindFirst(x => x.Type == ClaimTypes.Name).Value">Забронировать</a>
+    </p>
+</div>

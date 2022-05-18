@@ -19,6 +19,14 @@ namespace BusinessLogicLayer.Interfaces
         IEnumerable<CopyDTO> GetCopies(int? book);
         CopyDTO GetCopy(int? id);
 
+        void CreateOrder(OrderDTO orderDTO);
+        void UpdateOrder(OrderDTO orderDTO);
+        void DeleteOrder(int id);
+        IEnumerable<OrderDTO> GetOrders(int? orderDTO);
+        OrderDTO GetOrder(int? orderDTO);
+
         bool IsFreeCopiesExist(int bookId);
+
+        int GetFreeCopyId(int bookId);
     }
 }
